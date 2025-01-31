@@ -1,4 +1,6 @@
 #include <iostream>
+#include <limits>
+
 using std::cout;
 using std::endl;
 using std::cin;
@@ -22,6 +24,25 @@ Handle invalid input gracefully.
 Ensure at least one path leads to a successful escape and one to a failure.
 */
 
+int g_Choice = -1;
+
+void selectChoice() {
+	cout << "Please enter a choice (1-3): ";
+	cin >> g_Choice;
+
+	//This cin.fail check was suggested by ChatGPT because issues with the while loop if random information besides a number was entered
+	if (cin.fail()) {
+		cin.clear();  // Clear the error flag
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Discard invalid input
+		g_Choice = -1;  // Reset to invalid choice
+	}
+
+	if (g_Choice < 1 || g_Choice > 3) {
+		g_Choice = -1;
+	}
+	cout << endl << endl;
+}
+
 /* Room planning:
 Room 0:
 Choices:
@@ -41,18 +62,6 @@ Leads to:
 -Room 1
 -Successful escape
 */
-
-int g_Choice = -1;
-
-void selectChoice() {
-	cout << "Please enter a choice (1-3): ";
-	cin >> g_Choice;
-
-	if (g_Choice < 1 || g_Choice > 3) {
-		g_Choice = -1;
-	}
-	cout << endl << endl;
-}
 
 int main() {
 	bool isRunning = true;
@@ -74,6 +83,9 @@ int main() {
 				cout << "You meet a gruesome demise.." << endl << endl;
 				isRunning = false;
 			}
+			else if (g_Choice == -1) {
+				cout << "Please enter a valid number between 1-3." << endl << endl;
+			}
 			break;
 		case 1:
 			selectChoice();
@@ -89,6 +101,9 @@ int main() {
 				cout << "You meet a gruesome demise.." << endl << endl;
 				isRunning = false;
 			}
+			else if (g_Choice == -1) {
+				cout << "Please enter a valid number between 1-3." << endl << endl;
+			}
 			break;
 		case 2:
 			selectChoice();
@@ -103,6 +118,9 @@ int main() {
 			else if (g_Choice == 3) {
 				cout << "You successfully escape the dungeon!" << endl << endl;
 				isRunning = false;
+			}
+			else if (g_Choice == -1) {
+				cout << "Please enter a valid number between 1-3." << endl << endl;
 			}
 			break;
 		}
